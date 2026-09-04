@@ -1,0 +1,19 @@
+{
+  "id": "daneshselwal/cuq-02-baseline-uncertainty",
+  "title": "CUQ - 02 - Baseline Uncertainty Comparison",
+  "code_file": "Model_uncertainty_comparison.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "machine_shape": "",
+  "dataset_sources": [
+    "daneshselwal/cuq-data"
+  ],
+  "kernel_sources": [
+    "daneshselwal/cuq-01-baseline"
+  ],
+  "model_sources": []
+}

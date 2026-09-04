@@ -1,0 +1,88 @@
+[{"stream_name":"stderr","time":6.001483087,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.001524191,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.001530128,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.001534557,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":6.552548237,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.552578253,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.552583766,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.552588526,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":23.377038113,"data":"TensorFlow: 2.20.0\n"}
+,{"stream_name":"stdout","time":23.420003644,"data":"INPUTS: ['classification-uq-data-v2']\n"}
+,{"stream_name":"stdout","time":23.420039897,"data":"classification-uq-data-v2 ['ref.csv', 'data.csv']\n"}
+,{"stream_name":"stdout","time":23.420043643,"data":"Data file:     /kaggle/input/classification-uq-data/data.csv\n"}
+,{"stream_name":"stdout","time":23.420046925,"data":"Label file:    /kaggle/input/classification-uq-data/ref.csv\n"}
+,{"stream_name":"stdout","time":23.42006361,"data":"Model dir:     /kaggle/working/Classification/baseline/models\n"}
+,{"stream_name":"stdout","time":23.420067589,"data":"Results dir:   /kaggle/working/Classification/baseline/results\n"}
+,{"stream_name":"stdout","time":23.420071977,"data":"Plot dir:      /kaggle/working/Classification/baseline/results/training_plots\n"}
+,{"stream_name":"stdout","time":23.420075524,"data":"Arch preset:   legacy_arch\n"}
+,{"stream_name":"stderr","time":26.175523686,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":26.175570657,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":26.175577318,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":26.175644118,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":26.175716879,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":26.175909736,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":26.176251364,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":26.176269196,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":26.176273557,"data":"Exception encountered at \"In [5]\":\n"}
+,{"stream_name":"stderr","time":26.176277246,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":26.17628099,"data":"FileNotFoundError                         Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":26.176284221,"data":"/tmp/ipykernel_22/2160676766.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":26.176288211,"data":"----\u003e 1 x_img, y_img = load_multispectral_6band(DATA_FILE, LABEL_FILE, H, W, B)\n"}
+,{"stream_name":"stderr","time":26.176291502,"data":"      2 X, y, coords = extract_labeled_patches(x_img, y_img, PATCH_SIZE)\n"}
+,{"stream_name":"stderr","time":26.176313978,"data":"      3 \n"}
+,{"stream_name":"stderr","time":26.176317812,"data":"      4 num_classes = int(np.unique(y).size)\n"}
+,{"stream_name":"stderr","time":26.176321256,"data":"      5 input_shape = (PATCH_SIZE, PATCH_SIZE, B)\n"}
+,{"stream_name":"stderr","time":26.176324275,"data":"\n"}
+,{"stream_name":"stderr","time":26.176327639,"data":"/tmp/ipykernel_22/3690167586.py in load_multispectral_6band(data_path, label_path, height, width, bands)\n"}
+,{"stream_name":"stderr","time":26.176331239,"data":"      1 def load_multispectral_6band(data_path, label_path, height, width, bands):\n"}
+,{"stream_name":"stderr","time":26.176335139,"data":"      2     \"\"\"Load multispectral data and reference labels; normalise each band to [0, 1].\"\"\"\n"}
+,{"stream_name":"stderr","time":26.176338689,"data":"----\u003e 3     x = pd.read_csv(data_path).to_numpy(dtype=np.float32).reshape(height, width, bands)\n"}
+,{"stream_name":"stderr","time":26.176342363,"data":"      4     y = pd.read_csv(label_path).to_numpy(dtype=np.int32).reshape(height, width)\n"}
+,{"stream_name":"stderr","time":26.176345842,"data":"      5 \n"}
+,{"stream_name":"stderr","time":26.176348978,"data":"\n"}
+,{"stream_name":"stderr","time":26.176353039,"data":"/usr/local/lib/python3.12/dist-packages/pandas/io/parsers/readers.py in read_csv(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)\n"}
+,{"stream_name":"stderr","time":26.17636256,"data":"   1024     kwds.update(kwds_defaults)\n"}
+,{"stream_name":"stderr","time":26.176365949,"data":"   1025 \n"}
+,{"stream_name":"stderr","time":26.176369575,"data":"-\u003e 1026     return _read(filepath_or_buffer, kwds)\n"}
+,{"stream_name":"stderr","time":26.176373147,"data":"   1027 \n"}
+,{"stream_name":"stderr","time":26.176376737,"data":"   1028 \n"}
+,{"stream_name":"stderr","time":26.176379985,"data":"\n"}
+,{"stream_name":"stderr","time":26.1763836,"data":"/usr/local/lib/python3.12/dist-packages/pandas/io/parsers/readers.py in _read(filepath_or_buffer, kwds)\n"}
+,{"stream_name":"stderr","time":26.176387623,"data":"    618 \n"}
+,{"stream_name":"stderr","time":26.176391124,"data":"    619     # Create the parser.\n"}
+,{"stream_name":"stderr","time":26.176395785,"data":"--\u003e 620     parser = TextFileReader(filepath_or_buffer, **kwds)\n"}
+,{"stream_name":"stderr","time":26.176399643,"data":"    621 \n"}
+,{"stream_name":"stderr","time":26.176403032,"data":"    622     if chunksize or iterator:\n"}
+,{"stream_name":"stderr","time":26.176406631,"data":"\n"}
+,{"stream_name":"stderr","time":26.17641016,"data":"/usr/local/lib/python3.12/dist-packages/pandas/io/parsers/readers.py in __init__(self, f, engine, **kwds)\n"}
+,{"stream_name":"stderr","time":26.176413971,"data":"   1618 \n"}
+,{"stream_name":"stderr","time":26.176417299,"data":"   1619         self.handles: IOHandles | None = None\n"}
+,{"stream_name":"stderr","time":26.176420919,"data":"-\u003e 1620         self._engine = self._make_engine(f, self.engine)\n"}
+,{"stream_name":"stderr","time":26.176424663,"data":"   1621 \n"}
+,{"stream_name":"stderr","time":26.176428052,"data":"   1622     def close(self) -\u003e None:\n"}
+,{"stream_name":"stderr","time":26.176436308,"data":"\n"}
+,{"stream_name":"stderr","time":26.176440272,"data":"/usr/local/lib/python3.12/dist-packages/pandas/io/parsers/readers.py in _make_engine(self, f, engine)\n"}
+,{"stream_name":"stderr","time":26.176444276,"data":"   1878                 if \"b\" not in mode:\n"}
+,{"stream_name":"stderr","time":26.176448402,"data":"   1879                     mode += \"b\"\n"}
+,{"stream_name":"stderr","time":26.176452267,"data":"-\u003e 1880             self.handles = get_handle(\n"}
+,{"stream_name":"stderr","time":26.176455984,"data":"   1881                 f,\n"}
+,{"stream_name":"stderr","time":26.176459373,"data":"   1882                 mode,\n"}
+,{"stream_name":"stderr","time":26.176463291,"data":"\n"}
+,{"stream_name":"stderr","time":26.176467328,"data":"/usr/local/lib/python3.12/dist-packages/pandas/io/common.py in get_handle(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)\n"}
+,{"stream_name":"stderr","time":26.176479356,"data":"    871         if ioargs.encoding and \"b\" not in ioargs.mode:\n"}
+,{"stream_name":"stderr","time":26.176483471,"data":"    872             # Encoding\n"}
+,{"stream_name":"stderr","time":26.176487496,"data":"--\u003e 873             handle = open(\n"}
+,{"stream_name":"stderr","time":26.176491216,"data":"    874                 handle,\n"}
+,{"stream_name":"stderr","time":26.176494876,"data":"    875                 ioargs.mode,\n"}
+,{"stream_name":"stderr","time":26.176498495,"data":"\n"}
+,{"stream_name":"stderr","time":26.176502071,"data":"FileNotFoundError: [Errno 2] No such file or directory: '/kaggle/input/classification-uq-data/data.csv'\n"}
+,{"stream_name":"stderr","time":26.17650603,"data":"\n"}
+,{"stream_name":"stderr","time":28.213275,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":28.21329934,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":28.355338139,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":28.35536685,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":28.931649853,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":29.238638364,"data":"[NbConvertApp] Writing 84671 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":31.498827285,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":32.495316627,"data":"[NbConvertApp] Writing 507020 bytes to __results__.html\n"}
+]
