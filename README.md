@@ -263,3 +263,15 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-sacp-k08) — `cuq6-multicp-sacp-k08` (Staged with multihead dependency)
 * 📁 **sacp/**
     * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-sacp-k09) — `cuq6-sacp-k09` ⏳ **RUNNING** (Evaluating baseline weights)
+* 📁 **mambahsi/**
+    * 📓 [Model_training_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-mambahsi-k10) — `cuq6-mambahsi-k10` ✅ **COMPLETE** (Fresh 6-band SSM weights trained)
+    * 📓 [Model_uncertainty_comparison_mambahsi.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-mambahsi-uq-k11) — `cuq6-mambahsi-uq-k11` ⏳ **RUNNING** (Evaluating fresh MambaHSI weights)
+* 📁 **dofa/**
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-dofa-k12) — `cuq6-dofa-k12` ✅ **COMPLETE** (Fresh 6-band DOFA/Hiera weights trained)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-dofa-uq-k13) — `cuq6-dofa-uq-k13` ⏳ **QUEUED** (Evaluating fresh DOFA weights)
+* 📁 **georsclip/**
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-georsclip-k14) — `cuq6-georsclip-k14` 📦 **STAGED** (Vision-language text-head architecture)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-georsclip-uq-k15) — `cuq6-georsclip-uq-k15` 📦 **STAGED** (Conformal uncertainty quantification)
+* 📁 **spatialgcn/**
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-spatialgcn-k16) — `cuq6-spatialgcn-k16` 📦 **STAGED** (Spatial graph convolution architecture)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-spatialgcn-uq-k17) — `cuq6-spatialgcn-uq-k17` 📦 **STAGED** (Conformal uncertainty quantification)
