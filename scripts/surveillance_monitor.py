@@ -406,3 +406,13 @@ def take_reading(repo_root: Path):
 if __name__ == "__main__":
     root = Path(__file__).resolve().parent.parent
     take_reading(root)
+
+    # Also query and manage 65-band DIAS suite
+    dias_root = root.parent / "classification_dias"
+    dias_script = dias_root / "scripts" / "surveillance_monitor_dias.py"
+    if dias_script.exists():
+        print("\n" + "=" * 80)
+        try:
+            subprocess.run([sys.executable, str(dias_script)], check=False)
+        except Exception as e:
+            print(f"Error checking 65-band suite: {e}")
