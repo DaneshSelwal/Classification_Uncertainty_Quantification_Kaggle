@@ -70,6 +70,30 @@ KERNELS = [
         "name": "Model_sacp_comparison.ipynb",
         "type": "evaluation",
         "parent": "cuq6-baseline-k01"
+    },
+    {
+        "slug": "cuq6-mambahsi-k10",
+        "name": "Model_training_mambahsi.ipynb",
+        "type": "training",
+        "dependents": ["cuq6-mambahsi-uq-k11"]
+    },
+    {
+        "slug": "cuq6-mambahsi-uq-k11",
+        "name": "Model_uncertainty_comparison_mambahsi.ipynb",
+        "type": "evaluation",
+        "parent": "cuq6-mambahsi-k10"
+    },
+    {
+        "slug": "cuq6-dofa-k12",
+        "name": "Model_training.ipynb (DOFA)",
+        "type": "training",
+        "dependents": ["cuq6-dofa-uq-k13"]
+    },
+    {
+        "slug": "cuq6-dofa-uq-k13",
+        "name": "Model_uncertainty_comparison.ipynb (DOFA)",
+        "type": "evaluation",
+        "parent": "cuq6-dofa-k12"
     }
 ]
 
@@ -83,6 +107,10 @@ NOTEBOOK_SOURCE_MAP = {
     "cuq6-multicp-uq-k07": ("Classification/multicp/Model_uncertainty_multicp.ipynb", "Model_uncertainty_multicp.ipynb"),
     "cuq6-multicp-sacp-k08": ("Classification/multicp_sacp/Model_uncertainty_multicp_sacp.ipynb", "Model_uncertainty_multicp_sacp.ipynb"),
     "cuq6-sacp-k09": ("Classification/sacp/Model_sacp_comparison.ipynb", "Model_sacp_comparison.ipynb"),
+    "cuq6-mambahsi-k10": ("Classification/mambahsi/Model_training_mambahsi.ipynb", "Model_training_mambahsi.ipynb"),
+    "cuq6-mambahsi-uq-k11": ("Classification/mambahsi/Model_uncertainty_comparison_mambahsi.ipynb", "Model_uncertainty_comparison_mambahsi.ipynb"),
+    "cuq6-dofa-k12": ("Classification/dofa/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-dofa-uq-k13": ("Classification/dofa/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
 }
 
 def get_kernel_status(slug: str) -> str:
@@ -155,6 +183,8 @@ def sync_completed_artifacts(slug: str, repo_root: Path):
         "cuq6-credit-k03": (repo_root / "Classification/credit/results", "credit_evaluation_summary.csv"),
         "cuq6-multicp-uq-k07": (repo_root / "Classification/multicp/results", "multicp_summary.csv"),
         "cuq6-multicp-sacp-k08": (repo_root / "Classification/multicp_sacp/results", "scmcp_summary.csv"),
+        "cuq6-mambahsi-uq-k11": (repo_root / "Classification/mambahsi/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-dofa-uq-k13": (repo_root / "Classification/dofa/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
     }
     if slug not in sync_targets:
         return
@@ -203,6 +233,8 @@ def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
         ("cuq6-baseline-k01", ["cuq6-uncertainty-k02", "cuq6-sacp-k09"]),
         ("cuq6-ensemble-k04", ["cuq6-crede-k05", "cuq6-credit-k03"]),
         ("cuq6-multicp-k06", ["cuq6-multicp-uq-k07", "cuq6-multicp-sacp-k08"]),
+        ("cuq6-mambahsi-k10", ["cuq6-mambahsi-uq-k11"]),
+        ("cuq6-dofa-k12", ["cuq6-dofa-uq-k13"]),
     ]
 
     for parent, deps in cascade_rules:
