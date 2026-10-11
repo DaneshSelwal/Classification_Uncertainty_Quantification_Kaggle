@@ -1,10 +1,10 @@
 {
   "seed": 42,
-  "data_file": "/content/drive/My Drive/Classification/data/data.csv",
-  "label_file": "/content/drive/My Drive/Classification/data/ref.csv",
-  "model_dir": "/content/drive/My Drive/Classification/mambahsi/models",
-  "output_dir": "/content/drive/My Drive/Classification/mambahsi/results/uncertainty_results",
-  "results_dir": "/content/drive/My Drive/Classification/mambahsi/results",
+  "data_file": "/kaggle/input/datasets/daneshselwal/dias-6-bands-data/k001.csv",
+  "label_file": "/kaggle/input/datasets/daneshselwal/dias-6-bands-data/k002.csv",
+  "model_dir": "/kaggle/input",
+  "output_dir": "/kaggle/working/Classification/mambahsi/results/uncertainty_results",
+  "results_dir": "/kaggle/working/Classification/mambahsi/results/uncertainty_results",
   "h": 330,
   "w": 307,
   "b": 6,
@@ -16,5 +16,5 @@
   "raps_k_reg": 1,
   "n_clusters": 4,
   "batch_size": 128,
-  "timestamp_utc": "2026-07-01T09:24:51.896264+00:00"
+  "timestamp_utc": "2026-10-11T12:23:46.947545+00:00"
 }
