@@ -20,3 +20,6 @@ markdowns/
 *.docx
 .DS_Store
 *.keras
+.agents/
+surveillance_log.jsonl
+ORIGINAL_REQUEST.md
