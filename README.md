@@ -104,9 +104,26 @@ To use this repository with your own classification data:
 
 ### Method 1: Baseline Uncertainty
 **Location**: `Classification/baseline`
-Establishes the performance and uncertainty floor using standard Bayesian approximations.
-* **Techniques**: Monte Carlo Dropout, Temperature Scaling.
-* **Models**: AlexNet, GFNet, ViT-UNet.
+Establishes the performance and uncertainty floor using standard Bayesian approximations and Conformal Prediction.
+* **Techniques**: Monte Carlo Dropout, Temperature Scaling, Conformal Prediction (SplitCP, CcCP, RC3P, ClusteredCP, RAPS).
+* **Models**: AlexNet-CNN, GFNet, ViT-UNet.
+* **Trained Weights Artifacts**: `AlexNet_CNN_best.keras`, `GFNet_best.keras`, `ViT_UNet_best.keras` (Input: 9×9×6, Output: 7 classes).
+
+#### 6-Band Baseline Performance (100 Epochs, Kaggle GPU)
+| Model | Test Accuracy | Cohen's Kappa | Macro F1 | Weighted F1 | Test Brier | Test ECE (15-bin) | Status |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **AlexNet_CNN** | **99.70%** | **0.9959** | **0.9955** | **0.9970** | **0.0044** | **0.0013** | ✅ Verified |
+| **GFNet** | 99.63% | 0.9950 | 0.9954 | 0.9963 | 0.0057 | 0.0089 | ✅ Verified |
+| **ViT_UNet** | 99.28% | 0.9902 | 0.9904 | 0.9928 | 0.0136 | 0.0388 | ✅ Verified |
+
+#### Conformal Prediction Evaluation Summary ($\alpha = 0.05$, Target Coverage = 95.0%)
+| Method | AlexNet Coverage | GFNet Coverage | ViT-UNet Coverage | Avg Set Size | Median Set Size |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| **SplitCP** | 95.78% | 94.99% | 95.41% | 0.95 - 0.96 | 1.0 |
+| **CcCP (Class-Conditional)** | 96.47% | 96.19% | 95.59% | 0.96 | 1.0 |
+| **RC3P (Rank-Calibrated)** | 97.17% | 96.57% | 96.29% | 0.96 - 0.97 | 1.0 |
+| **ClusteredCP (K=4)** | 96.52% | 95.96% | 95.36% | 0.96 | 1.0 |
+| **RAPS** | 99.91% | 99.77% | 99.40% | 1.00 | 1.0 |
 
 ### Method 2: CREDIT
 **Location**: `Classification/credit`
@@ -231,18 +248,18 @@ _This repository is developed under the guidance of Dr. Mahesh Pal._
 Below is the directory structure mirroring our local repository, with direct links to the notebooks on Kaggle:
 
 * 📁 **baseline/**
-    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-baseline-k01)
-    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-uncertainty-k02)
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-baseline-k01) — `cuq6-baseline-k01` ✅ **COMPLETE** (Fresh weights & metrics verified)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-uncertainty-k02) — `cuq6-uncertainty-k02` ✅ **COMPLETE** (Conformal prediction evaluated)
 * 📁 **credit/**
-    * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-credit-k03)
+    * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-credit-k03) — `cuq6-credit-k03` (Distillation queued downstream of ensembles)
 * 📁 **data/**
 * 📁 **ensemble/**
-    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-ensemble-k04)
-    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-crede-k05)
+    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-ensemble-k04) — `cuq6-ensemble-k04` ⏳ **RUNNING**
+    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-crede-k05) — `cuq6-crede-k05` (Staged with ensemble dependency)
 * 📁 **multicp/**
-    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-k06)
-    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-uq-k07)
+    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-k06) — `cuq6-multicp-k06` ⏳ **RUNNING**
+    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-uq-k07) — `cuq6-multicp-uq-k07` (Staged with multihead dependency)
 * 📁 **multicp_sacp/**
-    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-sacp-k08)
+    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-sacp-k08) — `cuq6-multicp-sacp-k08` (Staged with multihead dependency)
 * 📁 **sacp/**
-    * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-sacp-k09)
+    * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-sacp-k09) — `cuq6-sacp-k09` ⏳ **RUNNING** (Evaluating baseline weights)

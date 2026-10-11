@@ -27,13 +27,14 @@ KERNELS = [
         "slug": "cuq6-credit-k03",
         "name": "Model_training_credit.ipynb",
         "type": "training/distillation",
+        "parent": "cuq6-ensemble-k04",
         "dependents": []
     },
     {
         "slug": "cuq6-ensemble-k04",
         "name": "Model_training_ensembles.ipynb",
         "type": "training",
-        "dependents": ["cuq6-crede-k05"]
+        "dependents": ["cuq6-crede-k05", "cuq6-credit-k03"]
     },
     {
         "slug": "cuq6-crede-k05",
@@ -123,7 +124,17 @@ def take_reading(repo_root: Path):
                     triggered.append(dep)
                     readings[dep] = "TRIGGERED"
 
-    # 2. MultiCP k06 complete -> retrigger k07, k08
+    # 2. Ensemble k04 complete -> retrigger k05, k03
+    if readings.get("cuq6-ensemble-k04") == "COMPLETE":
+        for dep in ["cuq6-crede-k05", "cuq6-credit-k03"]:
+            if readings.get(dep) in ["ERROR", "UNKNOWN"]:
+                print(f"[AUTO-TRIGGER] Ensemble trained! Pushing {dep}...")
+                ok = retrigger_kernel(dep)
+                if ok:
+                    triggered.append(dep)
+                    readings[dep] = "TRIGGERED"
+
+    # 3. MultiCP k06 complete -> retrigger k07, k08
     if readings.get("cuq6-multicp-k06") == "COMPLETE":
         for dep in ["cuq6-multicp-uq-k07", "cuq6-multicp-sacp-k08"]:
             if readings.get(dep) in ["ERROR", "UNKNOWN"]:
