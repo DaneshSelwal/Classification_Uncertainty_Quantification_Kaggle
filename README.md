@@ -30,6 +30,7 @@ Beyond traditional point-wise accuracy, this framework implements state-of-the-a
     * [Method 11: MambaHSI](#method-11-mambahsi)
 5. [🚀 Getting Started](#-getting-started)
 6. [📚 Resources & References](#-resources--references)
+7. [🌐 6 Bands Data - Directory & Kaggle Links](#-6-bands-data---directory--kaggle-links)
 
 ---
 
@@ -222,3 +223,26 @@ This project leverages state-of-the-art research in Uncertainty Quantification a
 
 ---
 _This repository is developed under the guidance of Dr. Mahesh Pal._
+
+---
+
+# 6 Bands Data - Directory & Kaggle Links
+
+Below is the directory structure mirroring our local repository, with direct links to the notebooks on Kaggle:
+
+* 📁 **baseline/**
+    * 📓 [Model_training.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-baseline-k01)
+    * 📓 [Model_uncertainty_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-uncertainty-k02)
+* 📁 **credit/**
+    * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-credit-k03)
+* 📁 **data/**
+* 📁 **ensemble/**
+    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-ensemble-k04)
+    * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-crede-k05)
+* 📁 **multicp/**
+    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-k06)
+    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-uq-k07)
+* 📁 **multicp_sacp/**
+    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-sacp-k08)
+* 📁 **sacp/**
+    * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-sacp-k09)
