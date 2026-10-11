@@ -175,7 +175,8 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
                 meta_json = json.load(f)
             gpu_needed = slug in {
                 "cuq6-baseline-k01", "cuq6-mambahsi-k10", "cuq6-dofa-k12",
-                "cuq6-georsclip-k14", "cuq6-spatialgcn-k16"
+                "cuq6-georsclip-k14", "cuq6-spatialgcn-k16",
+                "cuq6-ensemble-k04", "cuq6-multicp-k06",
             }
             if meta_json.get("enable_gpu", False) != gpu_needed:
                 meta_json["enable_gpu"] = gpu_needed
