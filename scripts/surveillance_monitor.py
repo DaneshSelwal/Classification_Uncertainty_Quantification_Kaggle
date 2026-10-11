@@ -158,7 +158,23 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
         src_nb = repo_root / rel_src
         dest_nb = staging_dir / nb_name
         if src_nb.exists():
-            shutil.copy2(src_nb, dest_nb)
+            # Strip previous cell outputs to keep push payload lean and avoid timeouts
+            try:
+                with open(src_nb, "r", encoding="utf-8") as f:
+                    nb_data = json.load(f)
+                has_outputs = False
+                for cell in nb_data.get("cells", []):
+                    if cell.get("cell_type") == "code" and cell.get("outputs"):
+                        has_outputs = True
+                        cell["outputs"] = []
+                        cell["execution_count"] = None
+                if has_outputs:
+                    with open(dest_nb, "w", encoding="utf-8") as f:
+                        json.dump(nb_data, f, indent=1)
+                else:
+                    shutil.copy2(src_nb, dest_nb)
+            except Exception:
+                shutil.copy2(src_nb, dest_nb)
 
     # 3. Push kernel
     try:
@@ -166,7 +182,7 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
             ["kaggle", "kernels", "push", "-p", str(staging_dir)],
             capture_output=True,
             text=True,
-            timeout=60
+            timeout=90
         )
         out = res.stdout.strip() or res.stderr.strip()
         print(f"[{slug}] Kaggle push result: {out}")
@@ -175,25 +191,35 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
         print(f"[{slug}] Push exception: {e}")
         return False
 
-def sync_completed_artifacts(slug: str, repo_root: Path):
-    """Sync results for newly completed evaluation kernels."""
+def sync_completed_artifacts(slug: str, repo_root: Path, state: dict, readings: dict) -> bool:
+    """Sync results for newly completed evaluation kernels using state-driven verification."""
     sync_targets = {
-        "cuq6-sacp-k09": (repo_root / "Classification/sacp/results", "combined_window_sacp_summary.csv"),
-        "cuq6-crede-k05": (repo_root / "Classification/ensemble/results", "crede_evaluation_summary.csv"),
+        "cuq6-sacp-k09": (repo_root / "Classification/sacp/results", "combined_summary_all_windows.csv"),
+        "cuq6-crede-k05": (repo_root / "Classification/ensemble/results", "CreDE_Master_Summary.csv"),
         "cuq6-credit-k03": (repo_root / "Classification/credit/results", "credit_evaluation_summary.csv"),
-        "cuq6-multicp-uq-k07": (repo_root / "Classification/multicp/results", "multicp_summary.csv"),
-        "cuq6-multicp-sacp-k08": (repo_root / "Classification/multicp_sacp/results", "scmcp_summary.csv"),
+        "cuq6-multicp-uq-k07": (repo_root / "Classification/multicp/results", "multicp_results.xlsx"),
+        "cuq6-multicp-sacp-k08": (repo_root / "Classification/multicp_sacp/results", "combined_summary_all_windows.csv"),
         "cuq6-mambahsi-uq-k11": (repo_root / "Classification/mambahsi/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
         "cuq6-dofa-uq-k13": (repo_root / "Classification/dofa/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
     }
     if slug not in sync_targets:
-        return
+        return False
+
+    dep_state = state.get(slug, {})
+    if dep_state.get("synced", False):
+        return False
+
+    # Check parent kernel status from KERNELS
+    kernel_def = next((k for k in KERNELS if k["slug"] == slug), None)
+    if kernel_def and "parent" in kernel_def:
+        parent_slug = kernel_def["parent"]
+        parent_status = readings.get(parent_slug, "UNKNOWN")
+        if parent_status != "COMPLETE":
+            # Parent has not finished; any current COMPLETE status on child is a premature run
+            return False
 
     dest_dir, check_file = sync_targets[slug]
-    if (dest_dir / check_file).exists():
-        return
-
-    print(f"[{slug}] Kernel COMPLETE! Downloading outputs...")
+    print(f"[{slug}] Kernel COMPLETE! Downloading outputs to verify and sync...")
     with tempfile.TemporaryDirectory() as tmpdir:
         try:
             res = subprocess.run(
@@ -203,7 +229,20 @@ def sync_completed_artifacts(slug: str, repo_root: Path):
                 timeout=180
             )
             if res.returncode == 0:
+                matched_check = None
+                for root, _, files in os.walk(tmpdir):
+                    if check_file in files:
+                        p = Path(root) / check_file
+                        if p.stat().st_size > 0:
+                            matched_check = p
+                            break
+
+                if not matched_check:
+                    print(f"[{slug}] Warning: Downloaded output does not contain non-empty {check_file} (likely premature run). Skipping sync.")
+                    return False
+
                 dest_dir.mkdir(parents=True, exist_ok=True)
+                synced_count = 0
                 for root, _, files in os.walk(tmpdir):
                     if ".git" in root:
                         continue
@@ -211,9 +250,18 @@ def sync_completed_artifacts(slug: str, repo_root: Path):
                         if f.endswith((".csv", ".xlsx", ".png", ".json")) and not f.endswith(".log"):
                             src_path = os.path.join(root, f)
                             shutil.copy2(src_path, dest_dir / f)
-                            print(f"[{slug}] Synced {f} -> {dest_dir}")
+                            synced_count += 1
+                print(f"[{slug}] Successfully synced {synced_count} fresh artifact(s) -> {dest_dir}")
+                if slug not in state:
+                    state[slug] = {}
+                state[slug]["synced"] = True
+                state[slug]["status"] = "SYNCED_COMPLETE"
+                state[slug]["last_synced_at"] = datetime.datetime.now().isoformat()
+                return True
         except Exception as e:
             print(f"[{slug}] Sync output exception: {e}")
+            return False
+    return False
 
 def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
     """Evaluate parent completion rules and auto-trigger downstream runs with cycle state persistence."""
@@ -250,16 +298,17 @@ def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
                     state[dep] = {
                         "triggered_for": parent,
                         "status": "VERIFIED_COMPLETE",
+                        "synced": True,
                         "timestamp": datetime.datetime.now().isoformat()
                     }
                     continue
 
                 # Trigger if:
-                # 1. Dependent is in ERROR or UNKNOWN
+                # 1. Dependent is in ERROR or UNKNOWN (max 2 attempts)
                 # 2. Or dependent has not yet been triggered for the current parent's COMPLETE status
-                #    (handles premature runs that completed without parent weights)
+                attempts = dep_state.get("attempts", 0)
                 should_trigger = False
-                if curr_status in ["ERROR", "UNKNOWN"]:
+                if curr_status in ["ERROR", "UNKNOWN"] and attempts < 2:
                     should_trigger = True
                 elif not already_triggered_for_parent and curr_status not in ["RUNNING", "TRIGGERED", "QUEUED"]:
                     should_trigger = True
@@ -273,13 +322,15 @@ def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
                         state[dep] = {
                             "triggered_for": parent,
                             "status": "TRIGGERED",
+                            "synced": False,
+                            "attempts": attempts + 1,
                             "timestamp": datetime.datetime.now().isoformat()
                         }
 
     # Also check if any completed kernel needs artifact syncing
     for slug, status in readings.items():
         if status == "COMPLETE":
-            sync_completed_artifacts(slug, repo_root)
+            sync_completed_artifacts(slug, repo_root, state, readings)
 
     with open(state_file, "w") as f:
         json.dump(state, f, indent=2)
