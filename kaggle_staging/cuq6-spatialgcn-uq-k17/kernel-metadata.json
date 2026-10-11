@@ -1,0 +1,19 @@
+{
+  "id": "daneshselwal/cuq6-spatialgcn-uq-k17",
+  "title": "cuq6-spatialgcn-uq-k17",
+  "code_file": "Model_uncertainty_comparison.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "daneshselwal/dias-6-bands-data"
+  ],
+  "kernel_sources": [
+    "daneshselwal/cuq6-spatialgcn-k16"
+  ],
+  "competition_sources": [],
+  "model_sources": []
+}

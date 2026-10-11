@@ -94,6 +94,30 @@ KERNELS = [
         "name": "Model_uncertainty_comparison.ipynb (DOFA)",
         "type": "evaluation",
         "parent": "cuq6-dofa-k12"
+    },
+    {
+        "slug": "cuq6-georsclip-k14",
+        "name": "Model_training.ipynb (GeoRSCLIP)",
+        "type": "training",
+        "dependents": ["cuq6-georsclip-uq-k15"]
+    },
+    {
+        "slug": "cuq6-georsclip-uq-k15",
+        "name": "Model_uncertainty_comparison.ipynb (GeoRSCLIP)",
+        "type": "evaluation",
+        "parent": "cuq6-georsclip-k14"
+    },
+    {
+        "slug": "cuq6-spatialgcn-k16",
+        "name": "Model_training.ipynb (SpatialGCN)",
+        "type": "training",
+        "dependents": ["cuq6-spatialgcn-uq-k17"]
+    },
+    {
+        "slug": "cuq6-spatialgcn-uq-k17",
+        "name": "Model_uncertainty_comparison.ipynb (SpatialGCN)",
+        "type": "evaluation",
+        "parent": "cuq6-spatialgcn-k16"
     }
 ]
 
@@ -111,6 +135,10 @@ NOTEBOOK_SOURCE_MAP = {
     "cuq6-mambahsi-uq-k11": ("Classification/mambahsi/Model_uncertainty_comparison_mambahsi.ipynb", "Model_uncertainty_comparison_mambahsi.ipynb"),
     "cuq6-dofa-k12": ("Classification/dofa/Model_training.ipynb", "Model_training.ipynb"),
     "cuq6-dofa-uq-k13": ("Classification/dofa/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-georsclip-k14": ("Classification/georsclip/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-georsclip-uq-k15": ("Classification/georsclip/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-spatialgcn-k16": ("Classification/spatialgcn/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-spatialgcn-uq-k17": ("Classification/spatialgcn/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
 }
 
 def get_kernel_status(slug: str) -> str:
@@ -201,6 +229,8 @@ def sync_completed_artifacts(slug: str, repo_root: Path, state: dict, readings: 
         "cuq6-multicp-sacp-k08": (repo_root / "Classification/multicp_sacp/results", "combined_summary_all_windows.csv"),
         "cuq6-mambahsi-uq-k11": (repo_root / "Classification/mambahsi/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
         "cuq6-dofa-uq-k13": (repo_root / "Classification/dofa/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-georsclip-uq-k15": (repo_root / "Classification/georsclip/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-spatialgcn-uq-k17": (repo_root / "Classification/spatialgcn/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
     }
     if slug not in sync_targets:
         return False
