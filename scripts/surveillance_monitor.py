@@ -2,12 +2,17 @@
 """Surveillance Monitor for 6-Band Kaggle Kernels.
 Checks statuses of all 9 kernels, records readings to surveillance_log.jsonl,
 and automatically triggers dependent evaluation runs once parent training finishes.
+Supports self-healing staging reconstruction, robust parent-child dependency tracking,
+and automated artifact synchronization.
 """
 
 import datetime
 import json
+import os
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 KERNELS = [
@@ -68,6 +73,18 @@ KERNELS = [
     }
 ]
 
+NOTEBOOK_SOURCE_MAP = {
+    "cuq6-baseline-k01": ("Classification/baseline/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-uncertainty-k02": ("Classification/baseline/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-credit-k03": ("Classification/credit/Model_training_credit.ipynb", "Model_training_credit.ipynb"),
+    "cuq6-ensemble-k04": ("Classification/ensemble/Model_training_ensembles.ipynb", "Model_training_ensembles.ipynb"),
+    "cuq6-crede-k05": ("Classification/ensemble/Model_uncertainty_CreDE.ipynb", "Model_uncertainty_CreDE.ipynb"),
+    "cuq6-multicp-k06": ("Classification/multicp/Model_training_multihead.ipynb", "Model_training_multihead.ipynb"),
+    "cuq6-multicp-uq-k07": ("Classification/multicp/Model_uncertainty_multicp.ipynb", "Model_uncertainty_multicp.ipynb"),
+    "cuq6-multicp-sacp-k08": ("Classification/multicp_sacp/Model_uncertainty_multicp_sacp.ipynb", "Model_uncertainty_multicp_sacp.ipynb"),
+    "cuq6-sacp-k09": ("Classification/sacp/Model_sacp_comparison.ipynb", "Model_sacp_comparison.ipynb"),
+}
+
 def get_kernel_status(slug: str) -> str:
     try:
         res = subprocess.run(
@@ -84,25 +101,162 @@ def get_kernel_status(slug: str) -> str:
     except Exception as e:
         return f"ERR: {e}"
 
-def retrigger_kernel(slug: str) -> bool:
+def retrigger_kernel(slug: str, repo_root: Path) -> bool:
+    """Stage and push kernel to Kaggle. Self-heals from repository metadata if /tmp is missing."""
     staging_dir = Path(f"/tmp/cuq6_staging/{slug}")
-    if not staging_dir.exists():
-        return False
+    staging_dir.mkdir(parents=True, exist_ok=True)
+
+    # 1. Sync metadata from repository kaggle_staging
+    repo_meta = repo_root / "kaggle_staging" / slug / "kernel-metadata.json"
+    dest_meta = staging_dir / "kernel-metadata.json"
+    if repo_meta.exists():
+        shutil.copy2(repo_meta, dest_meta)
+
+    # Ensure enable_gpu is true
+    if dest_meta.exists():
+        try:
+            with open(dest_meta) as f:
+                meta_json = json.load(f)
+            if not meta_json.get("enable_gpu", False):
+                meta_json["enable_gpu"] = True
+                with open(dest_meta, "w") as f:
+                    json.dump(meta_json, f, indent=2)
+        except Exception:
+            pass
+
+    # 2. Sync notebook from repository source
+    if slug in NOTEBOOK_SOURCE_MAP:
+        rel_src, nb_name = NOTEBOOK_SOURCE_MAP[slug]
+        src_nb = repo_root / rel_src
+        dest_nb = staging_dir / nb_name
+        if src_nb.exists():
+            shutil.copy2(src_nb, dest_nb)
+
+    # 3. Push kernel
     try:
         res = subprocess.run(
             ["kaggle", "kernels", "push", "-p", str(staging_dir)],
             capture_output=True,
             text=True,
-            timeout=45
+            timeout=60
         )
-        return "successfully pushed" in res.stdout
-    except Exception:
+        out = res.stdout.strip() or res.stderr.strip()
+        print(f"[{slug}] Kaggle push result: {out}")
+        return "successfully pushed" in out.lower()
+    except Exception as e:
+        print(f"[{slug}] Push exception: {e}")
         return False
+
+def sync_completed_artifacts(slug: str, repo_root: Path):
+    """Sync results for newly completed evaluation kernels."""
+    sync_targets = {
+        "cuq6-sacp-k09": (repo_root / "Classification/sacp/results", "combined_window_sacp_summary.csv"),
+        "cuq6-crede-k05": (repo_root / "Classification/ensemble/results", "crede_evaluation_summary.csv"),
+        "cuq6-credit-k03": (repo_root / "Classification/credit/results", "credit_evaluation_summary.csv"),
+        "cuq6-multicp-uq-k07": (repo_root / "Classification/multicp/results", "multicp_summary.csv"),
+        "cuq6-multicp-sacp-k08": (repo_root / "Classification/multicp_sacp/results", "scmcp_summary.csv"),
+    }
+    if slug not in sync_targets:
+        return
+
+    dest_dir, check_file = sync_targets[slug]
+    if (dest_dir / check_file).exists():
+        return
+
+    print(f"[{slug}] Kernel COMPLETE! Downloading outputs...")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        try:
+            res = subprocess.run(
+                ["kaggle", "kernels", "output", f"daneshselwal/{slug}", "-p", tmpdir],
+                capture_output=True,
+                text=True,
+                timeout=180
+            )
+            if res.returncode == 0:
+                dest_dir.mkdir(parents=True, exist_ok=True)
+                for root, _, files in os.walk(tmpdir):
+                    if ".git" in root:
+                        continue
+                    for f in files:
+                        if f.endswith((".csv", ".xlsx", ".png", ".json")) and not f.endswith(".log"):
+                            src_path = os.path.join(root, f)
+                            shutil.copy2(src_path, dest_dir / f)
+                            print(f"[{slug}] Synced {f} -> {dest_dir}")
+        except Exception as e:
+            print(f"[{slug}] Sync output exception: {e}")
+
+def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
+    """Evaluate parent completion rules and auto-trigger downstream runs with cycle state persistence."""
+    state_file = repo_root / "scripts" / ".trigger_state.json"
+    state = {}
+    if state_file.exists():
+        try:
+            with open(state_file) as f:
+                state = json.load(f)
+        except Exception:
+            state = {}
+
+    triggered = []
+
+    # Rules: (Parent slug, [dependent slugs])
+    cascade_rules = [
+        ("cuq6-baseline-k01", ["cuq6-uncertainty-k02", "cuq6-sacp-k09"]),
+        ("cuq6-ensemble-k04", ["cuq6-crede-k05", "cuq6-credit-k03"]),
+        ("cuq6-multicp-k06", ["cuq6-multicp-uq-k07", "cuq6-multicp-sacp-k08"]),
+    ]
+
+    for parent, deps in cascade_rules:
+        parent_status = readings.get(parent, "UNKNOWN")
+        if parent_status == "COMPLETE":
+            for dep in deps:
+                curr_status = readings.get(dep, "UNKNOWN")
+                dep_state = state.get(dep, {})
+                already_triggered_for_parent = (dep_state.get("triggered_for") == parent)
+
+                # Special-case: k02 is already fully verified and stored in repo
+                if dep == "cuq6-uncertainty-k02" and (repo_root / "Classification/baseline/results/uncertainty_results/summary_metrics.csv").exists():
+                    state[dep] = {
+                        "triggered_for": parent,
+                        "status": "VERIFIED_COMPLETE",
+                        "timestamp": datetime.datetime.now().isoformat()
+                    }
+                    continue
+
+                # Trigger if:
+                # 1. Dependent is in ERROR or UNKNOWN
+                # 2. Or dependent has not yet been triggered for the current parent's COMPLETE status
+                #    (handles premature runs that completed without parent weights)
+                should_trigger = False
+                if curr_status in ["ERROR", "UNKNOWN"]:
+                    should_trigger = True
+                elif not already_triggered_for_parent and curr_status not in ["RUNNING", "TRIGGERED", "QUEUED"]:
+                    should_trigger = True
+
+                if should_trigger:
+                    print(f"[AUTO-TRIGGER] Parent {parent} is COMPLETE! Retriggering {dep}...")
+                    ok = retrigger_kernel(dep, repo_root)
+                    if ok:
+                        triggered.append(dep)
+                        readings[dep] = "TRIGGERED"
+                        state[dep] = {
+                            "triggered_for": parent,
+                            "status": "TRIGGERED",
+                            "timestamp": datetime.datetime.now().isoformat()
+                        }
+
+    # Also check if any completed kernel needs artifact syncing
+    for slug, status in readings.items():
+        if status == "COMPLETE":
+            sync_completed_artifacts(slug, repo_root)
+
+    with open(state_file, "w") as f:
+        json.dump(state, f, indent=2)
+
+    return triggered
 
 def take_reading(repo_root: Path):
     now = datetime.datetime.now().isoformat()
     readings = {}
-    triggered = []
 
     print(f"=== Surveillance Reading at {now} ===")
     print(f"{'Kernel Slug':<24} | {'Type':<18} | {'Status':<15} | {'Notebook'}")
@@ -113,36 +267,7 @@ def take_reading(repo_root: Path):
         readings[k["slug"]] = status
         print(f"{k['slug']:<24} | {k['type']:<18} | {status:<15} | {k['name']}")
 
-    # Check auto-trigger rules for completed parents
-    # 1. Baseline k01 complete -> retrigger k02, k09
-    if readings.get("cuq6-baseline-k01") == "COMPLETE":
-        for dep in ["cuq6-uncertainty-k02", "cuq6-sacp-k09"]:
-            if readings.get(dep) in ["ERROR", "UNKNOWN"]:
-                print(f"[AUTO-TRIGGER] Baseline trained! Pushing {dep}...")
-                ok = retrigger_kernel(dep)
-                if ok:
-                    triggered.append(dep)
-                    readings[dep] = "TRIGGERED"
-
-    # 2. Ensemble k04 complete -> retrigger k05, k03
-    if readings.get("cuq6-ensemble-k04") == "COMPLETE":
-        for dep in ["cuq6-crede-k05", "cuq6-credit-k03"]:
-            if readings.get(dep) in ["ERROR", "UNKNOWN"]:
-                print(f"[AUTO-TRIGGER] Ensemble trained! Pushing {dep}...")
-                ok = retrigger_kernel(dep)
-                if ok:
-                    triggered.append(dep)
-                    readings[dep] = "TRIGGERED"
-
-    # 3. MultiCP k06 complete -> retrigger k07, k08
-    if readings.get("cuq6-multicp-k06") == "COMPLETE":
-        for dep in ["cuq6-multicp-uq-k07", "cuq6-multicp-sacp-k08"]:
-            if readings.get(dep) in ["ERROR", "UNKNOWN"]:
-                print(f"[AUTO-TRIGGER] MultiCP trained! Pushing {dep}...")
-                ok = retrigger_kernel(dep)
-                if ok:
-                    triggered.append(dep)
-                    readings[dep] = "TRIGGERED"
+    triggered = check_and_auto_trigger(readings, repo_root)
 
     # Append to surveillance log
     log_file = repo_root / "surveillance_log.jsonl"

@@ -1,0 +1,20 @@
+{
+  "id": "daneshselwal/cuq6-credit-k03",
+  "title": "cuq6-credit-k03",
+  "code_file": "Model_training_credit.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": false,
+  "enable_gpu": true,
+  "enable_tpu": false,
+  "enable_internet": true,
+  "dataset_sources": [
+    "daneshselwal/dias-6-bands-data"
+  ],
+  "kernel_sources": [
+    "daneshselwal/cuq6-baseline-k01",
+    "daneshselwal/cuq6-ensemble-k04"
+  ],
+  "competition_sources": [],
+  "model_sources": []
+}

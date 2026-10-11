@@ -22,4 +22,6 @@ markdowns/
 *.keras
 .agents/
 surveillance_log.jsonl
+scripts/.trigger_state.json
+.trigger_state.json
 ORIGINAL_REQUEST.md
