@@ -168,13 +168,17 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
     if repo_meta.exists():
         shutil.copy2(repo_meta, dest_meta)
 
-    # Ensure enable_gpu is true
+    # Ensure enable_gpu matches requirement (preserve GPU quota for deep training kernels)
     if dest_meta.exists():
         try:
             with open(dest_meta) as f:
                 meta_json = json.load(f)
-            if not meta_json.get("enable_gpu", False):
-                meta_json["enable_gpu"] = True
+            gpu_needed = slug in {
+                "cuq6-baseline-k01", "cuq6-mambahsi-k10", "cuq6-dofa-k12",
+                "cuq6-georsclip-k14", "cuq6-spatialgcn-k16"
+            }
+            if meta_json.get("enable_gpu", False) != gpu_needed:
+                meta_json["enable_gpu"] = gpu_needed
                 with open(dest_meta, "w") as f:
                     json.dump(meta_json, f, indent=2)
         except Exception:
