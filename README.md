@@ -254,13 +254,13 @@ Below is the directory structure mirroring our local repository, with direct lin
     * 📓 [Model_training_credit.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-credit-k03) — `cuq6-credit-k03` ✅ **COMPLETE** (CreDE Evidential distillation verified)
 * 📁 **data/**
 * 📁 **ensemble/**
-    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-ensemble-k04) — `cuq6-ensemble-k04` 
+    * 📓 [Model_training_ensembles.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-ensemble-k04) — `cuq6-ensemble-k04` ⚠️ **CANCELLED** (not re-run in this pass)
     * 📓 [Model_uncertainty_CreDE.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-crede-k05) — `cuq6-crede-k05` ✅ **COMPLETE** (Credal Deep Ensemble evaluation)
 * 📁 **multicp/**
-    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-k06) — `cuq6-multicp-k06`
-    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-uq-k07) — `cuq6-multicp-uq-k07`
+    * 📓 [Model_training_multihead.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-k06) — `cuq6-multicp-k06` ⚠️ **CANCELLED** (not re-run in this pass)
+    * 📓 [Model_uncertainty_multicp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-uq-k07) — `cuq6-multicp-uq-k07` ❌ **ERROR** (depends on multicp-k06)
 * 📁 **multicp_sacp/**
-    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-sacp-k08) — `cuq6-multicp-sacp-k08`
+    * 📓 [Model_uncertainty_multicp_sacp.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-multicp-sacp-k08) — `cuq6-multicp-sacp-k08` ❌ **ERROR** (depends on multicp-k06)
 * 📁 **sacp/**
     * 📓 [Model_sacp_comparison.ipynb](https://www.kaggle.com/code/daneshselwal/cuq6-sacp-k09) — `cuq6-sacp-k09` ✅ **COMPLETE** (Multi-window SACP evaluated)
 * 📁 **mambahsi/**
