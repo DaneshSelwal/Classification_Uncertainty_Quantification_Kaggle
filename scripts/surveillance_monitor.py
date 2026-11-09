@@ -122,23 +122,23 @@ KERNELS = [
 ]
 
 NOTEBOOK_SOURCE_MAP = {
-    "cuq6-baseline-k01": ("Classification/baseline/Model_training.ipynb", "Model_training.ipynb"),
-    "cuq6-uncertainty-k02": ("Classification/baseline/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
-    "cuq6-credit-k03": ("Classification/credit/Model_training_credit.ipynb", "Model_training_credit.ipynb"),
-    "cuq6-ensemble-k04": ("Classification/ensemble/Model_training_ensembles.ipynb", "Model_training_ensembles.ipynb"),
-    "cuq6-crede-k05": ("Classification/ensemble/Model_uncertainty_CreDE.ipynb", "Model_uncertainty_CreDE.ipynb"),
-    "cuq6-multicp-k06": ("Classification/multicp/Model_training_multihead.ipynb", "Model_training_multihead.ipynb"),
-    "cuq6-multicp-uq-k07": ("Classification/multicp/Model_uncertainty_multicp.ipynb", "Model_uncertainty_multicp.ipynb"),
-    "cuq6-multicp-sacp-k08": ("Classification/multicp_sacp/Model_uncertainty_multicp_sacp.ipynb", "Model_uncertainty_multicp_sacp.ipynb"),
-    "cuq6-sacp-k09": ("Classification/sacp/Model_sacp_comparison.ipynb", "Model_sacp_comparison.ipynb"),
-    "cuq6-mambahsi-k10": ("Classification/mambahsi/Model_training_mambahsi.ipynb", "Model_training_mambahsi.ipynb"),
-    "cuq6-mambahsi-uq-k11": ("Classification/mambahsi/Model_uncertainty_comparison_mambahsi.ipynb", "Model_uncertainty_comparison_mambahsi.ipynb"),
-    "cuq6-dofa-k12": ("Classification/dofa/Model_training.ipynb", "Model_training.ipynb"),
-    "cuq6-dofa-uq-k13": ("Classification/dofa/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
-    "cuq6-georsclip-k14": ("Classification/georsclip/Model_training.ipynb", "Model_training.ipynb"),
-    "cuq6-georsclip-uq-k15": ("Classification/georsclip/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
-    "cuq6-spatialgcn-k16": ("Classification/spatialgcn/Model_training.ipynb", "Model_training.ipynb"),
-    "cuq6-spatialgcn-uq-k17": ("Classification/spatialgcn/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-baseline-k01": ("baseline/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-uncertainty-k02": ("baseline/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-credit-k03": ("credit/Model_training_credit.ipynb", "Model_training_credit.ipynb"),
+    "cuq6-ensemble-k04": ("ensemble/Model_training_ensembles.ipynb", "Model_training_ensembles.ipynb"),
+    "cuq6-crede-k05": ("ensemble/Model_uncertainty_CreDE.ipynb", "Model_uncertainty_CreDE.ipynb"),
+    "cuq6-multicp-k06": ("multicp/Model_training_multihead.ipynb", "Model_training_multihead.ipynb"),
+    "cuq6-multicp-uq-k07": ("multicp/Model_uncertainty_multicp.ipynb", "Model_uncertainty_multicp.ipynb"),
+    "cuq6-multicp-sacp-k08": ("multicp_sacp/Model_uncertainty_multicp_sacp.ipynb", "Model_uncertainty_multicp_sacp.ipynb"),
+    "cuq6-sacp-k09": ("sacp/Model_sacp_comparison.ipynb", "Model_sacp_comparison.ipynb"),
+    "cuq6-mambahsi-k10": ("mambahsi/Model_training_mambahsi.ipynb", "Model_training_mambahsi.ipynb"),
+    "cuq6-mambahsi-uq-k11": ("mambahsi/Model_uncertainty_comparison_mambahsi.ipynb", "Model_uncertainty_comparison_mambahsi.ipynb"),
+    "cuq6-dofa-k12": ("dofa/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-dofa-uq-k13": ("dofa/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-georsclip-k14": ("georsclip/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-georsclip-uq-k15": ("georsclip/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
+    "cuq6-spatialgcn-k16": ("spatialgcn/Model_training.ipynb", "Model_training.ipynb"),
+    "cuq6-spatialgcn-uq-k17": ("spatialgcn/Model_uncertainty_comparison.ipynb", "Model_uncertainty_comparison.ipynb"),
 }
 
 def get_kernel_status(slug: str) -> str:
@@ -221,15 +221,15 @@ def retrigger_kernel(slug: str, repo_root: Path) -> bool:
 def sync_completed_artifacts(slug: str, repo_root: Path, state: dict, readings: dict) -> bool:
     """Sync results for newly completed evaluation kernels using state-driven verification."""
     sync_targets = {
-        "cuq6-sacp-k09": (repo_root / "Classification/sacp/results", "combined_summary_all_windows.csv"),
-        "cuq6-crede-k05": (repo_root / "Classification/ensemble/results", "CreDE_Master_Summary.csv"),
-        "cuq6-credit-k03": (repo_root / "Classification/credit/results", "credit_evaluation_summary.csv"),
-        "cuq6-multicp-uq-k07": (repo_root / "Classification/multicp/results", "multicp_results.xlsx"),
-        "cuq6-multicp-sacp-k08": (repo_root / "Classification/multicp_sacp/results", "combined_summary_all_windows.csv"),
-        "cuq6-mambahsi-uq-k11": (repo_root / "Classification/mambahsi/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
-        "cuq6-dofa-uq-k13": (repo_root / "Classification/dofa/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
-        "cuq6-georsclip-uq-k15": (repo_root / "Classification/georsclip/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
-        "cuq6-spatialgcn-uq-k17": (repo_root / "Classification/spatialgcn/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-sacp-k09": (repo_root / "sacp/results", "combined_summary_all_windows.csv"),
+        "cuq6-crede-k05": (repo_root / "ensemble/results", "CreDE_Master_Summary.csv"),
+        "cuq6-credit-k03": (repo_root / "credit/results", "credit_evaluation_summary.csv"),
+        "cuq6-multicp-uq-k07": (repo_root / "multicp/results", "multicp_results.xlsx"),
+        "cuq6-multicp-sacp-k08": (repo_root / "multicp_sacp/results", "combined_summary_all_windows.csv"),
+        "cuq6-mambahsi-uq-k11": (repo_root / "mambahsi/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-dofa-uq-k13": (repo_root / "dofa/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-georsclip-uq-k15": (repo_root / "georsclip/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
+        "cuq6-spatialgcn-uq-k17": (repo_root / "spatialgcn/results/uncertainty_results", "conformal_reports_all_models.xlsx"),
     }
     if slug not in sync_targets:
         return False
@@ -323,7 +323,7 @@ def check_and_auto_trigger(readings: dict, repo_root: Path) -> list:
                 already_triggered_for_parent = (dep_state.get("triggered_for") == parent)
 
                 # Special-case: k02 is already fully verified and stored in repo
-                if dep == "cuq6-uncertainty-k02" and (repo_root / "Classification/baseline/results/uncertainty_results/summary_metrics.csv").exists():
+                if dep == "cuq6-uncertainty-k02" and (repo_root / "baseline/results/uncertainty_results/summary_metrics.csv").exists():
                     state[dep] = {
                         "triggered_for": parent,
                         "status": "VERIFIED_COMPLETE",

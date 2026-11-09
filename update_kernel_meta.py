@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 # Sync baseline metadata with active 6-band Kaggle settings
-meta_path = Path('Classification/baseline/kernel-metadata.json')
+meta_path = Path('baseline/kernel-metadata.json')
 if meta_path.exists():
     with open(meta_path, 'r') as f:
         meta = json.load(f)
@@ -18,4 +18,4 @@ if meta_path.exists():
     with open(meta_path, 'w') as f:
         json.dump(meta, f, indent=2)
 
-    print("Updated Classification/baseline/kernel-metadata.json")
+    print("Updated baseline/kernel-metadata.json")

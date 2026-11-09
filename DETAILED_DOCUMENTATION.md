@@ -70,7 +70,7 @@ Classification_Uncertainty_Quantification_Analysis/
 ├── LICENSE                            # Open-source license (Apache 2.0)
 ├── .gitignore                         # Git exclusion rules
 │
-├── Classification/                    # 📂 Main source code directory
+├── baseline/                          # 📂 Baseline MC Dropout & TS
 │   │
 │   ├── data/                          # 📊 Dataset directory
 │   │   ├── data.csv                   # Band-stacked multispectral features (330×307×6 bands)
@@ -293,7 +293,7 @@ All custom layers use `@register_keras_serializable` for checkpoint save/load co
 
 ## 5. Method 1 — Baseline Uncertainty
 
-**Directory:** `Classification/baseline/`  
+**Directory:** `baseline/`  
 **Files:** `Model_training.ipynb/.md`, `Model_uncertainty_comparison.ipynb/.md`
 
 ### 5.1 Training Phase
@@ -384,7 +384,7 @@ For all CP methods, thresholds are applied pixel-wise to the full-scene probabil
 
 ## 6. Method 2 — CREDIT (Credal Ensemble Distillation)
 
-**Directory:** `Classification/credit/`  
+**Directory:** `credit/`  
 **Files:** `Model_training_credit.ipynb/.md`  
 **Reference:** Wang et al., "Credal Ensemble Distillation for Uncertainty Quantification," arXiv:2511.13766
 
@@ -450,7 +450,7 @@ Only **1 forward pass** at inference vs. M=5 for the full ensemble — significa
 
 ## 7. Method 3 — DAPM (Deep Adaptive Predictive Modeling)
 
-**Directory:** `Classification/dapm/`  
+**Directory:** `dapm/`  
 **Files:** `Model_training_dapm_full.ipynb/.md`, `Model_uncertainty_dapm_full.ipynb/.md`
 
 ### 7.1 Core Idea
@@ -555,7 +555,7 @@ $$t = \frac{\bar{g}_1 - \bar{g}_2}{\sqrt{s_1^2/N + s_2^2/N}}$$
 
 ## 8. Method 4 — Deep Ensembles & CreDE
 
-**Directory:** `Classification/ensemble/`  
+**Directory:** `ensemble/`  
 **Files:** `Model_training_ensembles.ipynb/.md`, `Model_uncertainty_CreDE.ipynb/.md`
 
 ### 8.1 Ensemble Construction
@@ -628,7 +628,7 @@ $$\hat{c}(x) = \arg\max_i p^*_i(x)$$
 
 ## 9. Method 5 — MultiCP (Multi-Head Conformal Prediction)
 
-**Directory:** `Classification/multicp/`  
+**Directory:** `multicp/`  
 **Files:** `Model_training_multihead.ipynb/.md`, `Model_uncertainty_multicp.ipynb/.md`
 
 ### 9.1 Multi-Head Architecture
@@ -687,7 +687,7 @@ where ξ = 0.10 (top 10% flagged as uncertain).
 
 ## 10. Method 6 — SACP (Self-Adaptive Conformal Prediction)
 
-**Directory:** `Classification/sacp/`  
+**Directory:** `sacp/`  
 **Files:** `Model_sacp_comparison.ipynb/.md`
 
 ### 10.1 Core Idea
@@ -721,7 +721,7 @@ $$\hat{\mathcal{C}}_{1-\alpha}(B_{n+1}) = \{y \in \mathcal{Y} : V_k(B_{n+1}, y) 
 
 ## 11. Method 7 — SCMCP (Spatial Multi-Head Conformal Prediction)
 
-**Directory:** `Classification/multicp_sacp/`  
+**Directory:** `multicp_sacp/`  
 **Files:** `Model_uncertainty_multicp_sacp.ipynb/.md`
 
 ### 11.1 Core Innovation
@@ -773,7 +773,7 @@ $$\mathcal{C}_{SCMCP}(x_i) = \bigcap_{k=1}^{K} \mathcal{C}^{(k)}(x_i) = \{c \in 
 
 ## 12. Method 8 — Focal Loss & CB Focal Loss
 
-**Directory:** `Classification/trials/focal_loss/` & `Classification/trials/cb_focal_loss/`
+**Directory:** `trials/focal_loss/` & `trials/cb_focal_loss/`
 
 Focuses on resolving class imbalance via standard Focal Loss and Class-Balanced Focal Loss. Enhances the predictive confidence for minority classes and adjusts the margin of prediction sets appropriately.
 
@@ -781,7 +781,7 @@ Focuses on resolving class imbalance via standard Focal Loss and Class-Balanced 
 
 ## 13. Method 9 — EDL & EDL_v2
 
-**Directory:** `Classification/trials/edl/` & `Classification/trials/edl_v2/`
+**Directory:** `trials/edl/` & `trials/edl_v2/`
 
 Implements Evidential Deep Learning based on Subjective Logic. Replaces softmax with a Dirichlet distribution output to quantify epistemic and aleatoric uncertainty without the need for sampling or ensembling.
 
@@ -789,7 +789,7 @@ Implements Evidential Deep Learning based on Subjective Logic. Replaces softmax 
 
 ## 14. Method 10 — CDL (Credal Deep Learning)
 
-**Directory:** `Classification/trials/cdl/`
+**Directory:** `trials/cdl/`
 
 Extends evidential principles using imprecise probabilities and credal sets. Captures severe uncertainty and conflicting evidence by tracking the bounds of allowable probability distributions.
 
@@ -797,7 +797,7 @@ Extends evidential principles using imprecise probabilities and credal sets. Cap
 
 ## 15. Method 11 — MambaHSI
 
-**Directory:** `Classification/mambahsi/`
+**Directory:** `mambahsi/`
 
 Adapts the state-of-the-art Mamba State-Space Model architecture for Hyperspectral Image classification. Offers linear scaling for long-range spatial-spectral sequences, solving the quadratic bottleneck of Vision Transformers.
 
@@ -805,7 +805,7 @@ Adapts the state-of-the-art Mamba State-Space Model architecture for Hyperspectr
 
 ## 16. Method 12 — DOFA (Dynamic Wavelength Tokenization)
 
-**Directory:** `Classification/dofa/`
+**Directory:** `dofa/`
 
 Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA Hiera Fusion approaches. Designed to handle varying continuous spectral channels across multi-sensor remote sensing payloads, ensuring highly stable token generation.
 
@@ -813,7 +813,7 @@ Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA H
 
 ## 17. Method 13 — GeoRSCLIP (Geospatial Foundation Model)
 
-**Directory:** `Classification/georsclip/`
+**Directory:** `georsclip/`
 
 Fine-tunes the GeoRSCLIP vision-language foundation model using a text-head adaptation. Leverages extensive multimodal remote sensing pre-training to boost feature discrimination.
 
@@ -821,7 +821,7 @@ Fine-tunes the GeoRSCLIP vision-language foundation model using a text-head adap
 
 ## 18. Method 14 — SpatialGCN (Spatial Graph Convolution)
 
-**Directory:** `Classification/spatialgcn/`
+**Directory:** `spatialgcn/`
 
 Employs Spatial Graph Convolutional Networks (SpatialGCN) to model complex pixel-wise dependencies, significantly enhancing local spatial coherence in the classification outputs.
 

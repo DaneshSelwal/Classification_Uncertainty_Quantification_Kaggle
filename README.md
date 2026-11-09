@@ -52,32 +52,25 @@ This framework addresses the critical need for reliability in machine learning m
 
 ## 📂 Repository Structure
 
-The project is organized into a modular architecture optimized for portability and experimental reproducibility. The main source code is organized within the `Classification/` directory:
+The project is organized into a clean, modular architecture matching the root layout of `classification_dias`:
 
 ```text
 .
-├── Classification/    # 📂 Main Project Folder (Upload this to MyDrive/)
-│   ├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
-│   ├── credit/        # 📂 CREDIT: Calibration-aware training
-│   ├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
-│   ├── data/          # 📊 Raw Datasets (data.csv, multispectral/)
-│   ├── dofa/          # 📂 DOFA: Dynamic Wavelength Tokenization
-│   ├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
-│   ├── georsclip/     # 📂 GeoRSCLIP: Geospatial Vision-Language Foundation Model (New)
-│   ├── mambahsi/      # 📂 MambaHSI Architecture for classification
-│   ├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
-│   ├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP
-│   ├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
-│   ├── spatialgcn/    # 📂 SpatialGCN: Spatial Graph Convolutional Networks (New)
-│   └── trials/        # 🧪 Experimental Methods
-│       ├── cb_focal_loss/
-│       ├── cdl/
-│       ├── conformal_reg/
-│       ├── edl/
-│       ├── edl_v2/
-│       └── focal_loss/
-├── examples/          # 📁 Example Dataset Suites (untouched)
-└── README.md          # 📑 Documentation
+├── baseline/      # 📂 Standard UQ (MC Dropout, Temp Scaling)
+├── credit/        # 📂 CREDIT: Calibration-aware training
+├── dapm/          # 📂 DAPM: Deep Adaptive Predictive Modeling
+├── dofa/          # 📂 DOFA: Dynamic Wavelength Tokenization
+├── ensemble/      # 📂 CreDE: Credal Deep Ensembles
+├── georsclip/     # 📂 GeoRSCLIP: Geospatial Vision-Language Foundation Model
+├── mambahsi/      # 📂 MambaHSI Architecture for classification
+├── multicp/       # 📂 MultiCP: Multi-head Conformal Prediction
+├── multicp_sacp/  # 📂 SCMCP: Spatial MultiCP
+├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
+├── scripts/       # 📂 Execution & Surveillance Automation
+├── spatialgcn/    # 📂 SpatialGCN: Spatial Graph Convolutional Networks
+├── data.csv       # 📊 Dataset features
+├── ref.csv        # 📊 Dataset ground-truth labels
+└── README.md      # 📑 Documentation
 ```
 
 ---
@@ -90,7 +83,7 @@ To use this repository with your own classification data:
 
 1. **Prepare Data**: Ensure your features and labels are in `.csv` or `.npy` format.
 2. **Path Configuration**:
-    * Place your data in the `Classification/data/` directory.
+    * Place your data in the `./` or `data/` directory.
     * Notebooks use relative paths (e.g., `../data/data.csv`) for compatibility with Google Colab and local environments.
 3. **Model Selection**: Choose from AlexNet, GFNet, or ViT-UNet by modifying the configuration in the respective notebooks.
 
@@ -98,12 +91,12 @@ To use this repository with your own classification data:
 
 ## 🛠️ Workflow & Methodology
 
-> **Note**: Each method subfolder in `Classification/` includes a comprehensive `.md` file detailing the mathematical framework, implementation logic, and experimental logs.
+> **Note**: Each method subfolder includes a comprehensive `.md` file detailing the mathematical framework, implementation logic, and experimental logs.
 
 ---
 
 ### Method 1: Baseline Uncertainty
-**Location**: `Classification/baseline`
+**Location**: `baseline`
 Establishes the performance and uncertainty floor using standard Bayesian approximations and Conformal Prediction.
 * **Techniques**: Monte Carlo Dropout, Temperature Scaling, Conformal Prediction (SplitCP, CcCP, RC3P, ClusteredCP, RAPS).
 * **Models**: AlexNet-CNN, GFNet, ViT-UNet.
@@ -126,64 +119,64 @@ Establishes the performance and uncertainty floor using standard Bayesian approx
 | **RAPS** | 99.91% | 99.77% | 99.40% | 1.00 | 1.0 |
 
 ### Method 2: CREDIT
-**Location**: `Classification/credit`
+**Location**: `credit`
 Confidence-Calibrated Robustness for Deep Image Classification.
 * **Focus**: Improving the alignment between model confidence and actual performance.
 * **Output**: Calibrated spatial uncertainty maps.
 
 ### Method 3: DAPM
-**Location**: `Classification/dapm`
+**Location**: `dapm`
 Deep Adaptive Predictive Modeling for classification under distribution shift.
 * **Architecture**: Includes Encoder, Diffusion, and Multi-head decoders.
 * **Result**: High-resolution p-value distributions and uncertainty masks.
 
 ### Method 4: Ensemble (CreDE)
-**Location**: `Classification/ensemble`
+**Location**: `ensemble`
 Credal Deep Ensembles (CreDE) for robust uncertainty.
 * **Process**: Training multiple model instances to capture epistemic uncertainty.
 * **Metrics**: Credal entropy and variance-based measures.
 
 ### Method 5: MultiCP
-**Location**: `Classification/multicp`
+**Location**: `multicp`
 Multi-head Conformal Prediction.
 * **Goal**: Distribution-free uncertainty sets with finite-sample validity.
 * **Output**: Performance measures across different significance levels ($\alpha$).
 
 ### Method 6: SACP
-**Location**: `Classification/sacp`
+**Location**: `sacp`
 Self-Adaptive Conformal Prediction.
 * **Advantage**: Online calibration and adaptation across varying spatial windows (ws=3, 5, 7, 9).
 * **Summary**: Combined per-class coverage reports for all models.
 
 ### Method 7: SCMCP (Spatial MultiCP)
-**Location**: `Classification/multicp_sacp`
+**Location**: `multicp_sacp`
 Spatial Multi-Head Conformal Prediction.
 * **Core**: Combines spatial probability smoothing with multi-head conformal intersection.
 * **Feature**: Produces tight, spatially-coherent uncertainty regions by intersecting calibrated sets from $K$ heads after local smoothing.
 
 ### Method 8: Focal Loss & CB Focal Loss
-**Location**: `Classification/trials/focal_loss` & `Classification/trials/cb_focal_loss`
+**Location**: `trials/focal_loss` & `trials/cb_focal_loss`
 * **Focus**: Addressing class imbalance using standard and Class-Balanced Focal Loss.
 * **Output**: Improved minority class prediction with respective uncertainty estimates.
 
 ### Method 9: EDL (Evidential Deep Learning)
-**Location**: `Classification/trials/edl` & `Classification/trials/edl_v2`
+**Location**: `trials/edl` & `trials/edl_v2`
 * **Core**: Uses Subjective Logic to place a Dirichlet distribution over class probabilities.
 * **Goal**: Directly quantifies epistemic and aleatoric uncertainty without sampling.
 
 ### Method 10: CDL (Credal Deep Learning)
-**Location**: `Classification/trials/cdl`
+**Location**: `trials/cdl`
 * **Goal**: Robust uncertainty quantification using imprecise probabilities and credal sets.
 
 ### Method 11: MambaHSI
-**Location**: `Classification/mambahsi`
+**Location**: `mambahsi`
 * **Architecture**: State-of-the-art Mamba state-space models adapted for Hyperspectral Imagery (HSI).
 * **Focus**: Efficient long-range spatial-spectral dependencies modeling.
 
 ---
 
 ### Method 12: DOFA
-**Location**: `Classification/dofa`
+**Location**: `dofa`
 Dynamic Wavelength Tokenization.
 * **Architecture**: DOFA Spectral and DOFA Hiera Fusion for robust multispectral tokenization.
 * **Focus**: Analyzing prediction stability across continuous spectral channels.
@@ -191,13 +184,13 @@ Dynamic Wavelength Tokenization.
 ---
 
 ### Method 13: GeoRSCLIP
-**Location**: `Classification/georsclip`
+**Location**: `georsclip`
 Geospatial Vision-Language Foundation Model.
 * **Architecture**: Text-head fine-tuning on GeoRSCLIP representations.
 * **Focus**: Leveraging multimodal pre-training for remote sensing tasks.
 
 ### Method 14: SpatialGCN
-**Location**: `Classification/spatialgcn`
+**Location**: `spatialgcn`
 Spatial Graph Convolutional Networks.
 * **Architecture**: GCN processing on spatial grid topologies.
 * **Focus**: Capturing complex spatial dependencies in classification maps.
@@ -211,10 +204,10 @@ Spatial Graph Convolutional Networks.
    git clone https://github.com/DaneshSelwal/Classification_Uncertainty_Quantification_Analysis
    ```
 2. **Upload to Google Drive**:
-   Upload the `Classification/` folder to your `MyDrive/` directory.
+   Upload the repository folder to your `MyDrive/` directory.
 3. **Run in Colab**:
    Navigate to any phase (e.g., `baseline/Model_training.ipynb`) and open with Google Colab.
-   * Notebooks are pre-configured to mount `/content/drive` and find data in `/content/drive/MyDrive/Classification/data/`.
+   * Notebooks are pre-configured to mount `/content/drive` and find data in `/content/drive/MyDrive/`.
 4. **Execution Order**:
    **Data Prep** $\rightarrow$ **Baseline Training** $\rightarrow$ **Advanced UQ Methods** $\rightarrow$ **Visualization**.
 

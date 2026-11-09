@@ -33,7 +33,7 @@ content = content.replace("21. [References", "23. [References") # Handling if pa
 # 3. Add Methods 8-14 sections
 new_methods = """## 12. Method 8 — Focal Loss & CB Focal Loss
 
-**Directory:** `Classification/trials/focal_loss/` & `Classification/trials/cb_focal_loss/`
+**Directory:** `trials/focal_loss/` & `trials/cb_focal_loss/`
 
 Focuses on resolving class imbalance via standard Focal Loss and Class-Balanced Focal Loss. Enhances the predictive confidence for minority classes and adjusts the margin of prediction sets appropriately.
 
@@ -41,7 +41,7 @@ Focuses on resolving class imbalance via standard Focal Loss and Class-Balanced 
 
 ## 13. Method 9 — EDL & EDL_v2
 
-**Directory:** `Classification/trials/edl/` & `Classification/trials/edl_v2/`
+**Directory:** `trials/edl/` & `trials/edl_v2/`
 
 Implements Evidential Deep Learning based on Subjective Logic. Replaces softmax with a Dirichlet distribution output to quantify epistemic and aleatoric uncertainty without the need for sampling or ensembling.
 
@@ -49,7 +49,7 @@ Implements Evidential Deep Learning based on Subjective Logic. Replaces softmax 
 
 ## 14. Method 10 — CDL (Credal Deep Learning)
 
-**Directory:** `Classification/trials/cdl/`
+**Directory:** `trials/cdl/`
 
 Extends evidential principles using imprecise probabilities and credal sets. Captures severe uncertainty and conflicting evidence by tracking the bounds of allowable probability distributions.
 
@@ -57,7 +57,7 @@ Extends evidential principles using imprecise probabilities and credal sets. Cap
 
 ## 15. Method 11 — MambaHSI
 
-**Directory:** `Classification/mambahsi/`
+**Directory:** `mambahsi/`
 
 Adapts the state-of-the-art Mamba State-Space Model architecture for Hyperspectral Image classification. Offers linear scaling for long-range spatial-spectral sequences, solving the quadratic bottleneck of Vision Transformers.
 
@@ -65,7 +65,7 @@ Adapts the state-of-the-art Mamba State-Space Model architecture for Hyperspectr
 
 ## 16. Method 12 — DOFA (Dynamic Wavelength Tokenization)
 
-**Directory:** `Classification/dofa/`
+**Directory:** `dofa/`
 
 Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA Hiera Fusion approaches. Designed to handle varying continuous spectral channels across multi-sensor remote sensing payloads, ensuring highly stable token generation.
 
@@ -73,7 +73,7 @@ Dynamic Wavelength Tokenization framework incorporating DOFA Spectral and DOFA H
 
 ## 17. Method 13 — GeoRSCLIP (Geospatial Foundation Model)
 
-**Directory:** `Classification/georsclip/`
+**Directory:** `georsclip/`
 
 Geospatial Vision-Language Foundation Model. Implements text-head fine-tuning on robust GeoRSCLIP representations, leveraging multimodal pre-training for state-of-the-art remote sensing classification.
 
@@ -81,7 +81,7 @@ Geospatial Vision-Language Foundation Model. Implements text-head fine-tuning on
 
 ## 18. Method 14 — SpatialGCN (Spatial Graph Convolution)
 
-**Directory:** `Classification/spatialgcn/`
+**Directory:** `spatialgcn/`
 
 Spatial Graph Convolutional Networks. Utilizes GCN processing directly on spatial grid topologies to capture complex local and global spatial dependencies inherent in hyperspectral imagery classification maps.
 
