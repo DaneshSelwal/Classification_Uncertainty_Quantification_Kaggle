@@ -68,8 +68,6 @@ The project is organized into a clean, modular architecture matching the root la
 ├── sacp/          # 📂 SACP: Self-Adaptive Conformal Prediction
 ├── scripts/       # 📂 Execution & Surveillance Automation
 ├── spatialgcn/    # 📂 SpatialGCN: Spatial Graph Convolutional Networks
-├── data.csv       # 📊 Dataset features
-├── ref.csv        # 📊 Dataset ground-truth labels
 └── README.md      # 📑 Documentation
 ```
 

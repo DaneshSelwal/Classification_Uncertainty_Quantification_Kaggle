@@ -63,78 +63,94 @@ This framework addresses the critical need for **reliability and trustworthiness
 ## 2. Repository Structure — File-by-File
 
 ```
-Classification_Uncertainty_Quantification_Analysis/
+Classification_Uncertainty_Quantification_Kaggle/
 │
-├── README.md                          # High-level project overview and quick-start guide
-├── DETAILED_DOCUMENTATION.md          # This file — comprehensive technical reference
-├── LICENSE                            # Open-source license (Apache 2.0)
-├── .gitignore                         # Git exclusion rules
+├── README.md                                  # High-level project overview and quick-start guide
+├── DETAILED_DOCUMENTATION.md                  # Comprehensive technical reference
+├── LICENSE                                    # Open-source license (Apache 2.0)
+├── .gitignore                                 # Git exclusion rules
 │
-├── baseline/                          # 📂 Baseline MC Dropout & TS
-│   │
-│   ├── data/                          # 📊 Dataset directory
-│   │   ├── data.csv                   # Band-stacked multispectral features (330×307×6 bands)
-│   │   └── ref.csv                    # Ground-truth label map (330×307, 7 classes, 1-indexed)
-│   │
-│   ├── baseline/                      # 📂 Method 1: Baseline Uncertainty
-│   │   ├── Model_training.ipynb       # Training notebook — AlexNet, GFNet, ViT-UNet
-│   │   ├── Model_training.md          # Detailed summary of training pipeline
-│   │   ├── Model_uncertainty_comparison.ipynb  # 5 Conformal Prediction methods
-│   │   ├── Model_uncertainty_comparison.md     # Detailed summary of CP methods
-│   │   └── results/                   # Output directory
-│   │       ├── classification_summary.csv        # Per-model accuracy/kappa/F1
-│   │       ├── *_classification_report.json      # Per-class precision/recall/F1
-│   │       ├── training_plots/                   # Loss/accuracy curves
-│   │       ├── scene_visualizations/             # Full-scene prediction maps
-│   │       └── uncertainty_results/              # CP prediction set maps & stats
-│   │
-│   ├── credit/                        # 📂 Method 2: CREDIT
-│   │   ├── Model_training_credit.ipynb           # Knowledge distillation from ensemble to dual-head student
-│   │   ├── Model_training_credit.md              # Detailed summary of CREDIT pipeline
-│   │   └── results/                              # AU/EU/TU maps and summary tables
-│   │
-│   ├── dapm/                          # 📂 Method 3: DAPM
-│   │   ├── Model_training_dapm_full.ipynb        # VAE + Domain-Adversarial + Diffusion training
-│   │   ├── Model_training_dapm_full.md           # Detailed summary of DAPM training
-│   │   ├── Model_uncertainty_dapm_full.ipynb     # Welch t-test uncertainty quantification
-│   │   ├── Model_uncertainty_dapm_full.md        # Detailed summary of DAPM UQ
-│   │   └── results/                              # P-value maps, uncertainty masks
-│   │
-│   ├── ensemble/                      # 📂 Method 4: Deep Ensembles + CreDE
-│   │   ├── Model_training_ensembles.ipynb        # M=5 ensemble training per architecture
-│   │   ├── Model_training_ensembles.md           # Detailed summary of ensemble training
-│   │   ├── Model_uncertainty_CreDE.ipynb          # Credal Deep Ensemble uncertainty
-│   │   ├── Model_uncertainty_CreDE.md             # Detailed summary of CreDE UQ
-│   │   └── results/                              # AU/EU/TU maps, credal set analysis
-│   │
-│   ├── multicp/                       # 📂 Method 5: MultiCP
-│   │   ├── Model_training_multihead.ipynb        # Multi-head (K=7) model training
-│   │   ├── Model_training_multihead.md           # Detailed summary of multi-head training
-│   │   ├── Model_uncertainty_multicp.ipynb       # Multi-head conformal prediction
-│   │   ├── Model_uncertainty_multicp.md          # Detailed summary of MultiCP UQ
-│   │   └── results/                              # Prediction sets, head sweep analysis
-│   │
-│   ├── sacp/                          # 📂 Method 6: SACP
-│   │   ├── Model_sacp_comparison.ipynb           # Spatial-aware conformal prediction
-│   │   ├── Model_sacp_comparison.md              # Detailed summary of SACP
-│   │   └── results/                              # Per-window coverage reports
-│   │
-│   └── multicp_sacp/                  # 📂 Method 7: SCMCP (Spatial MultiCP)
-│       ├── Model_uncertainty_multicp_sacp.ipynb   # Combined spatial + multi-head CP
-│       ├── Model_uncertainty_multicp_sacp.md      # Detailed summary of SCMCP
-│       └── results/                              # Spatial uncertainty maps
+├── baseline/                                  # 📂 Method 1: Baseline Uncertainty (MC Dropout, TS, Conformal)
+│   ├── baseline.docx                          # Complete baseline analysis report
+│   ├── Model_training.ipynb                   # Training notebook — AlexNet, GFNet, ViT-UNet
+│   ├── Model_training.md                      # Detailed summary of training pipeline
+│   ├── Model_uncertainty_comparison.ipynb      # 5 Conformal Prediction methods
+│   ├── Model_uncertainty_comparison.md         # Detailed summary of CP methods
+│   └── results/                               # Output directory (metrics, reports, maps)
 │
-└── examples/                          # 📁 Pre-configured dataset example suites
-    ├── indian_pines_uncertainty_quantification/   # Classic hyperspectral benchmark
-    ├── pavia_uncertainty_quantification/          # Pavia Centre dataset
-    ├── pavia_university_uncertainty_quantification/  # Pavia University dataset
-    ├── 6_band_uncertainty_quantification/         # 6-band multispectral
-    ├── 372_band_uncertainty_quantification/       # Full hyperspectral (372 bands)
-    ├── dias_uncertainty_quantification/           # DIAS satellite data
-    ├── hisar_3mts_uncertainty_quantification/     # Hisar 3-month temporal stack
-    ├── hissar_25_uncertainty_quantification/      # Hisar 25-band
-    ├── multispectral_uncertainty_quantification/  # Generic multispectral template
-    └── planet_data_hisar_uncertainty_quantification/  # PlanetScope Hisar data
+├── credit/                                    # 📂 Method 2: CREDIT (Calibration-aware Distillation)
+│   ├── credit.docx                            # Complete CREDIT analysis report
+│   ├── Model_training_credit.ipynb            # Knowledge distillation from ensemble to dual-head student
+│   ├── Model_training_credit.md               # Detailed summary of CREDIT pipeline
+│   └── results/                               # AU/EU/TU maps and summary tables
+│
+├── dapm/                                      # 📂 Method 3: DAPM (Deep Adaptive Predictive Modeling)
+│   ├── dapm.docx                              # Complete DAPM analysis report
+│   ├── Model_training_dapm_full.ipynb         # VAE + Domain-Adversarial + Diffusion training
+│   ├── Model_training_dapm_full.md            # Detailed summary of DAPM training
+│   ├── Model_uncertainty_dapm_cp.ipynb        # Conformal prediction evaluation
+│   ├── Model_uncertainty_dapm_full.ipynb      # Welch t-test uncertainty quantification
+│   ├── Model_uncertainty_dapm_full.md         # Detailed summary of DAPM UQ
+│   └── results/                               # P-value maps, uncertainty masks
+│
+├── dofa/                                      # 📂 Method 4: DOFA (Dynamic Wavelength Tokenization)
+│   ├── dofa.docx                              # Complete DOFA analysis report
+│   ├── Model_training.ipynb                   # Wavelength-conditioned dynamic weight generation
+│   ├── Model_uncertainty_comparison.ipynb     # Conformal prediction comparison
+│   ├── Report_dofa.md                         # Detailed summary of DOFA
+│   └── results/                               # Classification reports, training plots
+│
+├── ensemble/                                  # 📂 Method 5: CreDE (Credal Deep Ensembles)
+│   ├── Ensemble.docx                          # Complete Ensemble & CreDE analysis report
+│   ├── Model_training_ensembles.ipynb         # M=5 ensemble training per architecture
+│   ├── Model_training_ensembles.md            # Detailed summary of ensemble training
+│   ├── Model_uncertainty_CreDE.ipynb          # Credal Deep Ensemble uncertainty
+│   ├── Model_uncertainty_CreDE.md             # Detailed summary of CreDE UQ
+│   └── results/                               # AU/EU/TU maps, credal set analysis
+│
+├── georsclip/                                 # 📂 Method 6: GeoRSCLIP (Vision-Language Foundation Model)
+│   ├── georsclip.docx                         # Complete GeoRSCLIP analysis report
+│   ├── Model_training.ipynb                   # Text-guided geospatial representation learning
+│   ├── Model_uncertainty_comparison.ipynb     # Conformal uncertainty evaluation
+│   ├── Report_georsclip.md                    # Detailed summary of GeoRSCLIP
+│   └── results/                               # Visualizations and reports
+│
+├── mambahsi/                                  # 📂 Method 7: MambaHSI (State Space Models for HSI)
+│   ├── mambahsi.docx                          # Complete MambaHSI analysis report
+│   ├── Model_training_mambahsi.ipynb          # Selective state space sequence modeling
+│   ├── Model_uncertainty_comparison_mambahsi.ipynb # Conformal prediction evaluation
+│   ├── Report_mambahsi.md                     # Detailed summary of MambaHSI
+│   └── results/                               # Classification and uncertainty results
+│
+├── multicp/                                   # 📂 Method 8: MultiCP (Multi-Head Conformal Prediction)
+│   ├── multicp.docx                           # Complete MultiCP analysis report
+│   ├── Model_training_multihead.ipynb         # Multi-head (K=7) model training
+│   ├── Model_training_multihead.md            # Detailed summary of multi-head training
+│   ├── Model_uncertainty_multicp.ipynb        # Multi-head conformal prediction
+│   ├── Model_uncertainty_multicp.md           # Detailed summary of MultiCP UQ
+│   └── results/                               # Prediction sets, head sweep analysis
+│
+├── multicp_sacp/                              # 📂 Method 9: SCMCP (Spatial MultiCP)
+│   ├── scmcp.docx                             # Complete SCMCP analysis report
+│   ├── Model_uncertainty_multicp_sacp.ipynb   # Combined spatial + multi-head CP
+│   ├── Model_uncertainty_multicp_sacp.md      # Detailed summary of SCMCP
+│   └── results/                               # Multi-window spatial uncertainty maps
+│
+├── sacp/                                      # 📂 Method 10: SACP (Self-Adaptive Conformal Prediction)
+│   ├── SACP.docx                              # Complete SACP analysis report
+│   ├── Model_sacp_comparison.ipynb            # Spatial-aware conformal prediction
+│   ├── Model_sacp_comparison.md               # Detailed summary of SACP
+│   └── results/                               # Per-window coverage reports
+│
+├── spatialgcn/                                # 📂 Method 11: SpatialGCN (Spatial Graph Convolutions)
+│   ├── spatialgcn.docx                        # Complete SpatialGCN analysis report
+│   ├── Model_training.ipynb                   # Graph convolutional network training
+│   ├── Model_uncertainty_comparison.ipynb     # Conformal prediction evaluation
+│   ├── Report_spatialgcn.md                   # Detailed summary of SpatialGCN
+│   └── results/                               # Classification reports and plots
+│
+└── scripts/                                   # 📂 Surveillance & Automation
+    └── surveillance_monitor.py                # Surveillance polling & staging
 ```
 
 ---
@@ -944,28 +960,7 @@ $$\text{NLL} = -\frac{1}{N}\sum_{i=1}^{N}\log p_i(y_i|x_i)$$
 
 ---
 
-## 22. Examples Directory
-
-The `examples/` directory contains **10 pre-configured dataset suites**, each mirroring the full `Classification/` directory structure (baseline, credit, dapm, ensemble, multi_cp, sacp, data). These serve as ready-to-use templates for different remote sensing datasets:
-
-| Example Suite | Description |
-|---------------|-------------|
-| `indian_pines_uncertainty_quantification` | Classic AVIRIS hyperspectral benchmark (224 bands, 16 classes) |
-| `pavia_uncertainty_quantification` | ROSIS Pavia Centre urban scene |
-| `pavia_university_uncertainty_quantification` | ROSIS Pavia University campus |
-| `6_band_uncertainty_quantification` | 6-band multispectral (template-compatible) |
-| `372_band_uncertainty_quantification` | Full hyperspectral (372 bands) |
-| `dias_uncertainty_quantification` | DIAS satellite data |
-| `hisar_3mts_uncertainty_quantification` | Hisar 3-month temporal composite |
-| `hissar_25_uncertainty_quantification` | Hisar 25-band multispectral |
-| `multispectral_uncertainty_quantification` | Generic multispectral template |
-| `planet_data_hisar_uncertainty_quantification` | PlanetScope commercial satellite data (Hisar) |
-
-Each suite has its own `data/` subdirectory and method-specific notebooks pre-configured for that dataset's band count and class structure.
-
----
-
-## 23. References
+## 22. References
 
 ### Research Papers
 

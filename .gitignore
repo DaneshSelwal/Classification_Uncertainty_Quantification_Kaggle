@@ -17,7 +17,6 @@ examples/*/data/
 *.zip
 bin/
 markdowns/
-*.docx
 .DS_Store
 *.keras
 .agents/
@@ -27,3 +26,14 @@ scripts/.trigger_state.json
 ORIGINAL_REQUEST.md
 __pycache__/
 *.pyc
+
+# Explicitly ensure required deliverables are tracked
+!*.docx
+!*.csv
+!*.xlsx
+!*.png
+!*.ipynb
+!*.json
+!*.md
+!scripts/*.py
+
